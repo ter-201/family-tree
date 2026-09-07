@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Multi-Generational Family Tree</title>
-    <!-- We use the free Treant.js library to handle the visual family tree layout -->
+    <!-- Core library styles needed to render the family tree paths -->
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f9fc; margin: 0; padding: 20px; color: #333; }
         h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
         .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-style: italic; }
         
-        /* Family Tree Styling */
+        /* Family Tree Layout Window */
         #family-tree-container { width: 100%; height: 500px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .node { padding: 10px; border-radius: 8px; background: #ecf0f1; border: 2px solid #bdc3c7; text-align: center; width: 120px; cursor: pointer; transition: transform 0.2s; }
         .node:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .node-name { font-weight: bold; font-size: 14px; color: #2c3e50; }
         .node-title { font-size: 11px; color: #7f8c8d; }
 
-        /* Profile Modal Sidebar */
+        /* Profile Sidebar Panel */
         .modal { display: none; position: fixed; right: 0; top: 0; width: 350px; height: 100%; background: white; box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 1000; padding: 30px 20px; box-sizing: border-box; overflow-y: auto; transition: right 0.3s ease; }
         .modal-active { display: block; }
         .close-btn { position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #95a5a6; }
@@ -28,11 +28,11 @@
         .section-title { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #34495e; border-bottom: 2px solid #ecf0f1; padding-bottom: 5px; margin-top: 25px; }
         .profile-text { font-size: 14px; line-height: 1.6; color: #555; }
         
-        /* Action Buttons */
+        /* Functional Layout Controls */
         .btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 10px; }
-        .btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; font-size: 14px; }
-        .btn-add { background: #2ecc71; color: white; margin: 20px auto; display: block; max-width: 200px; }
-        .btn-report { background: #e74c3c; color: white; }
+        .btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; font-size: 14px; display: block; }
+        .btn-add { background: #2ecc71; color: white; margin: 20px auto; max-width: 200px; }
+        .btn-report { background: #e74c3c; color: white; width: 100%; }
     </style>
 </head>
 <body>
@@ -40,17 +40,15 @@
     <h1>Our Living Family History</h1>
     <div class="subtitle">Scan the heirloom QR code to explore or add our history.</div>
 
-    <!-- The Tree Renders Here -->
+    <!-- The Tree Map Window Frame -->
     <div id="family-tree-container"></div>
 
-    <!-- Public Add Button -->
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfTvbxznqDI_zCEaGrxKJ1CRAoN5e7hyTZCvMadd6oFLGO2kg/viewform?usp=dialog" target="_blank" class="btn btn-add" style="text-decoration:none;">➕ Add Family Member</a>
- Add Family Member</button>
+    <!-- Public Add Button Form Link Engine (Line 47) -->
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfTvbxznqDI_zCEaGrxKJ1CRAoN5e7hyTZCvMadd6oFLGO2kg/viewform?usp=dialog" target="_blank" class="btn btn-add">➕ Add Family Member</a>
 
-    <!-- Slide-out Profile Modal -->
+    <!-- Detail Drawer Sheet overlay -->
     <div id="profile-modal" class="modal">
         <button class="close-btn" onclick="closeProfile()">✕</button>
-        <!-- Placeholder text; filled in dynamically by JavaScript -->
         <img id="p-img" class="profile-img" src="" alt="Profile Photo">
         <h2 id="p-name" class="profile-name"></h2>
         <div id="p-dates" class="profile-dates"></div>
@@ -59,30 +57,25 @@
         <p id="p-history" class="profile-text"></p>
 
         <div class="btn-group">
-            <button class="btn btn-report" onclick="alert('A notification has been sent to the Family Elders/Admins to review this profile for removal.')">⚠️ Report / Request Deletion</button>
+            <button class="btn btn-report" onclick="alert('A notification has been sent to the Family Admins to review this entry.')">⚠️ Report / Request Deletion</button>
         </div>
     </div>
 
-    <!-- Dependency Scripts for Rendering Trees -->
+    <!-- Required visual graphics rendering script libraries -->
     <script src="https://cloudflare.com"></script>
     <script src="https://cloudflare.com"></script>
 
     <script>
-        // DEVELOPER NOTE: Replace this mock web link below with your shared public Google Drive Folder url!
-        const googleDriveFolder = "https://google.com";
-
-        // This is your tree database. 
-        // To build the hierarchy, we use a simple "parent" link rule.
+        // Data Structure Map Array
         var tree_structure = {
             chart: { container: "#family-tree-container", connectors: { type: "step" } },
             nodeStructure: {
                 text: { name: "Arthur Smith", title: "Great Grandfather" },
                 HTMLclass: "node",
-                // Profile Information hidden inside data attributes
                 data: {
                     dates: "1912 - 1985",
                     history: "Arrived in the city with nothing but a toolbox. Built the family masonry business from the ground up, establishing 4 local community halls.",
-                    photo: "arthur_smith.jpg"
+                    photo: "https://unsplash.com"
                 },
                 children: [
                     {
@@ -91,7 +84,7 @@
                         data: {
                             dates: "1940 - 2018",
                             history: "First in the family to attend university. Graduated with a Civil Engineering degree, oversaw construction of major state highways.",
-                            photo: "robert_smith.jpg"
+                            photo: "https://unsplash.com"
                         }
                     },
                     {
@@ -100,35 +93,41 @@
                         data: {
                             dates: "1943 - Present",
                             history: "Renowned painter and music teacher. Taught over three generations of neighborhood children how to play the piano.",
-                            photo: "jane_smith.jpg"
+                            photo: "https://unsplash.com"
                         }
                     }
                 ]
             }
         };
 
-        // Initialize the visible tree layout
+        // Initialize display drawing script execution call
         var chart = new Treant(tree_structure);
 
-        // Intercept clicks on the family boxes to open the detailed drawer window
+        // Click detection handler rule routines
         document.addEventListener('click', function (e) {
             const node = e.target.closest('.node');
             if (!node) return;
             
-            // Find data array index matching this node name string to look up biography details
-            // For simplicity in this base file, we dig right into the raw DOM tree nodes array elements 
-            const nodeIndex = Array.from(document.querySelectorAll('.node')).indexOf(node);
+            const nodes = Array.from(document.querySelectorAll('.node'));
+            const nodeIndex = nodes.indexOf(node);
             
-            // Simple display mapper (Grabs details from our tree object template configurations above)
-            let memberData = nodeIndex === 0 ? tree_structure.nodeStructure.data : tree_structure.nodeStructure.children[nodeIndex - 1].data;
-            let memberText = nodeIndex === 0 ? tree_structure.nodeStructure.text : tree_structure.nodeStructure.children[nodeIndex - 1].text;
+            let memberData, memberText;
+            if (nodeIndex === 0) {
+                memberData = tree_structure.nodeStructure.data;
+                memberText = tree_structure.nodeStructure.text;
+            } else {
+                memberData = tree_structure.nodeStructure.children[nodeIndex - 1].data;
+                memberText = tree_structure.nodeStructure.text;
+                // Double check fallback safety indexing validation tags
+                if(tree_structure.nodeStructure.children[nodeIndex - 1]) {
+                     memberText = tree_structure.nodeStructure.children[nodeIndex - 1].text;
+                }
+            }
 
             document.getElementById('p-name').innerText = memberText.name;
             document.getElementById('p-dates').innerText = memberData.dates;
             document.getElementById('p-history').innerText = memberData.history;
-            
-            // Fallback default avatar profile drawing logic if custom asset is not provided or configured
-            document.getElementById('p-img').src = memberData.photo ? memberData.photo : "https://placeholder.com";
+            document.getElementById('p-img').src = memberData.photo;
 
             document.getElementById('profile-modal').classList.add('modal-active');
         });
